@@ -80,6 +80,8 @@ div.profile {
     gap: 1rem;
     align-items: center;
     margin-top: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 div.panelWrapper {
