@@ -1,11 +1,10 @@
 'use client'
 
-import styles from "./sidePanel.module.css";
+import styles from "./chatSidePanel.module.css";
 
 import { useEffect, useState } from "react";
 
 import { UserProfile, useAuthenticatedData } from "@/app/common/auth";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
 
@@ -41,7 +40,6 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer";
 
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { ArrowRight, ArrowLeft, ArrowDown, Spinner, Check, FolderPlus, DotsThreeVertical, House, StackPlus, UserCirclePlus } from "@phosphor-icons/react";
@@ -71,12 +69,12 @@ import {
 
 import { Pencil, Trash, Share } from "@phosphor-icons/react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { modifyFileFilterForConversation } from "@/app/common/chatFunctions";
 import { ScrollAreaScrollbar } from "@radix-ui/react-scroll-area";
+import { UserProfileComponent } from "../SidePanel/SidePanel";
 
 // Define a fetcher function
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -351,7 +349,7 @@ function SessionsAndFiles(props: SessionsAndFilesProps) {
                                         agent_avatar={chatHistory.agent_avatar}
                                         agent_name={chatHistory.agent_name}
                                         showSidePanel={props.setEnabled}
-                                        />
+                                    />
                                 ))}
                             </div>
                         ))}
@@ -365,7 +363,7 @@ function SessionsAndFiles(props: SessionsAndFilesProps) {
             </div>
             <FilesMenu conversationId={props.conversationId} uploadedFiles={props.uploadedFiles} isMobileWidth={props.isMobileWidth} />
             {props.userProfile &&
-                <UserProfileComponent userProfile={props.userProfile} webSocketConnected={props.webSocketConnected} collapsed={false} />
+                <UserProfileComponent userProfile={props.userProfile} connected={props.webSocketConnected} collapsed={false} />
             }</>
     )
 }
@@ -582,51 +580,6 @@ function ChatSessionsModal({ data, showSidePanel }: ChatSessionsModalProps) {
     );
 }
 
-interface UserProfileProps {
-    userProfile: UserProfile;
-    webSocketConnected?: boolean;
-    collapsed: boolean;
-}
-
-function UserProfileComponent(props: UserProfileProps) {
-    if (props.collapsed) {
-        return (
-            <div className={styles.profile}>
-                <Avatar className="h-7 w-7">
-                    <AvatarImage src={props.userProfile.photo} alt="user profile" />
-                    <AvatarFallback>
-                        {props.userProfile.username[0]}
-                    </AvatarFallback>
-                </Avatar>
-            </div>
-        );
-    }
-
-    return (
-        <div className={styles.profile}>
-            <Link href="/settings">
-                <Avatar>
-                    <AvatarImage src={props.userProfile.photo} alt="user profile" />
-                    <AvatarFallback>
-                        {props.userProfile.username[0]}
-                    </AvatarFallback>
-                </Avatar>
-            </Link>
-            <div className={styles.profileDetails}>
-                <p>{props.userProfile?.username}</p>
-                {/* Connected Indicator */}
-                <div className="flex gap-2 items-center">
-                    <div className={`inline-flex h-4 w-4 rounded-full opacity-75 ${props.webSocketConnected ? 'bg-green-500' : 'bg-rose-500'}`}></div>
-                    <p className="text-muted-foreground text-sm">
-                        {props.webSocketConnected ? "Connected" : "Disconnected"}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-
-}
-
 const fetchChatHistory = async (url: string) => {
     const response = await fetch(url, {
         method: 'GET',
@@ -647,7 +600,7 @@ export const useChatSessionsFetchRequest = (url: string) => {
     };
 };
 
-interface SidePanelProps {
+interface ChatSidePanelProps {
     webSocketConnected?: boolean;
     conversationId: string | null;
     uploadedFiles: string[];
@@ -655,7 +608,7 @@ interface SidePanelProps {
 }
 
 
-export default function SidePanel(props: SidePanelProps) {
+export default function ChatSidePanel(props: ChatSidePanelProps) {
     const [data, setData] = useState<ChatHistory[] | null>(null);
     const [organizedData, setOrganizedData] = useState<GroupedChatHistory | null>(null);
     const [subsetOrganizedData, setSubsetOrganizedData] = useState<GroupedChatHistory | null>(null);

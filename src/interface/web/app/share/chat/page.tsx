@@ -3,7 +3,7 @@
 import styles from './sharedChat.module.css';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 
-import SidePanel from '../../components/sidePanel/chatHistorySidePanel';
+import ChatSidePanel from '../../components/chatSidePanel/chatSidePanel';
 import ChatHistory from '../../components/chatHistory/chatHistory';
 import NavMenu from '../../components/navMenu/navMenu';
 import Loading from '../../components/loading/loading';
@@ -296,7 +296,7 @@ export default function SharedChat() {
                 {title}
             </title>
             <div className={styles.sidePanel}>
-                <SidePanel
+                <ChatSidePanel
                     webSocketConnected={!!conversationId ? (chatWS != null) : true}
                     conversationId={conversationId ?? null}
                     uploadedFiles={uploadedFiles}

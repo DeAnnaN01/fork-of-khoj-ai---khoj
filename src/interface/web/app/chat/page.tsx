@@ -4,7 +4,7 @@ import styles from './chat.module.css';
 import React, { Suspense, useEffect, useState } from 'react';
 
 import SuggestionCard from '../components/suggestions/suggestionCard';
-import SidePanel from '../components/sidePanel/chatHistorySidePanel';
+import ChatSidePanel from '../components/chatSidePanel/chatSidePanel';
 import ChatHistory from '../components/chatHistory/chatHistory';
 import NavMenu from '../components/navMenu/navMenu';
 import { useSearchParams } from 'next/navigation'
@@ -261,7 +261,7 @@ export default function Chat() {
                 {title}
             </title>
             <div className={styles.sidePanel}>
-                <SidePanel
+                <ChatSidePanel
                     webSocketConnected={chatWS !== null}
                     conversationId={conversationId}
                     uploadedFiles={uploadedFiles}
